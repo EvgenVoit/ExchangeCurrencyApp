@@ -6,5 +6,13 @@ import java.util.List;
 
 public interface CurrencyService {
 
-    public List<Currency> getAllCurrencies();
+    List<Currency> getAllCurrencies();
+
+    Currency getCurrencyByCode(String code);
+
+    void addCurrency(Currency currency);
+
+    void deleteCurrency(String code);
+
+    void deleteCurrencyById(Integer id);
 }

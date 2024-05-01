@@ -18,13 +18,13 @@ public class Currency {
     private int id;
 
     @Column(name = "currency_code")
-    private String currencyCode;
+    private String code;
 
     @Column(name = "full_name")
-    private String fullCurrencyName;
+    private String name;
 
     @Column(name = "sign")
-    private String currencySign;
+    private String sign;
 
 
 }

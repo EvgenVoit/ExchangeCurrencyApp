@@ -19,13 +19,15 @@ public class ExchangeRate {
     @Column(name = "ID")
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "base_currency_Id", referencedColumnName = "ID")
+    private Currency baseCurrency;
+
+    @ManyToOne
+    @JoinColumn(name = "target_currency_Id", referencedColumnName = "ID")
+    private Currency targetCurrency;
+
     @Column(name = "rate")
     private BigDecimal rate;
-
-    @Column(name = "base_currency_Id")
-    private int baseCurrencyId;
-
-    @Column(name = "target_currency_Id")
-    private int targetCurrencyId;
 
 }
