@@ -1,5 +1,6 @@
 package com.evgenvoit.CurrencyExchangeApp.controller;
 
+import com.evgenvoit.CurrencyExchangeApp.dto.ExchangeCurrencyDTO;
 import com.evgenvoit.CurrencyExchangeApp.dto.ExchangeRateDTO;
 import com.evgenvoit.CurrencyExchangeApp.entity.Currency;
 import com.evgenvoit.CurrencyExchangeApp.entity.ExchangeRate;
@@ -73,8 +74,10 @@ public class Controller {
     }
 
     @GetMapping("/exchange") // working
-    public BigDecimal makeExchange(@RequestParam String from, @RequestParam String to, @RequestParam BigDecimal amount) {
-        return exchangeService.convertAmount(from, to, amount);
+    public ExchangeCurrencyDTO makeExchange(@RequestParam String from, @RequestParam String to, @RequestParam BigDecimal amount) {
+        List<ExchangeRate> exchangeRates = exchangeRateService.getRateByCode(from, to);
+        BigDecimal result = exchangeService.convertAmount(from, to, amount);
+        return new ExchangeCurrencyDTO(exchangeRates,amount,result);
     }
 
 }
