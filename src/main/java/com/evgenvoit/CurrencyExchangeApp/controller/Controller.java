@@ -28,7 +28,7 @@ public class Controller {
 
     @GetMapping("/swagger")
     public ModelAndView redirectToSwaggerUi() {
-        return new ModelAndView( "redirect:/swagger-ui/index.html");
+        return new ModelAndView("redirect:/swagger-ui/index.html");
     }
 
     @GetMapping("/currencies") //working
@@ -72,11 +72,9 @@ public class Controller {
         exchangeRateService.updateExchangeRate(baseCode, targetCode, rate.getRate());
     }
 
-    @GetMapping("/exchange/{baseCode}/{targetCode}/{amount}") // not working
-    public String makeExchange(@PathVariable String baseCode, @PathVariable String targetCode, @PathVariable BigDecimal amount) {
-        BigDecimal result = exchangeService.convertAmount(targetCode, baseCode);
-        return "RESULT - " + result.multiply(amount);
+    @GetMapping("/exchange") // working
+    public BigDecimal makeExchange(@RequestParam String from, @RequestParam String to, @RequestParam BigDecimal amount) {
+        return exchangeService.convertAmount(from, to, amount);
     }
-
 
 }

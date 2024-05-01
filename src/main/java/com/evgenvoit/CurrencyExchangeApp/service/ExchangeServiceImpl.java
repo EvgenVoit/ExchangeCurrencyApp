@@ -24,19 +24,13 @@ public class ExchangeServiceImpl implements ExchangeService {
     private ExchangeRepository exchangeRepository;
 
     @Override
-    public BigDecimal convertAmount(String baseCurrencyCode, String targetCurrencyCode) {
-//        Currency baseCurrency = currencyRepository.getCurrencyByCode(baseCurrencyCode);
-//        Currency targetCurrency = currencyRepository.getCurrencyByCode(targetCurrencyCode);
-//        List<ExchangeRate> exchangeRates = exchangeRateRepository.findByBaseCurrencyAndTargetCurrency(baseCurrency, targetCurrency);
-//        ExchangeRate exchangeRate = exchangeRates.get(0);
-//        BigDecimal rate = exchangeRate.getRate();
-//        return rate.multiply(amount);
+    public BigDecimal convertAmount(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount) {
+        Currency baseCurrency = currencyRepository.getCurrencyByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyRepository.getCurrencyByCode(targetCurrencyCode);
+        ExchangeRate exchangeRate = exchangeRepository.findByBaseCurrencyAndTargetCurrency(baseCurrency,targetCurrency);
+        BigDecimal rate = exchangeRate.getRate();
+        return rate.multiply(amount);
 
-        ExchangeRate exchangeRate = exchangeRepository.findByBaseCurrencyCodeAndTargetCurrencyCode(baseCurrencyCode, targetCurrencyCode);
-        if (exchangeRate == null) {
-            return BigDecimal.ZERO;
-        } else {
-            return exchangeRate.getRate();
-        }
+
     }
 }

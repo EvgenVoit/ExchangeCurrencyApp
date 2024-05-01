@@ -28,7 +28,7 @@ public class ExchangeRateImpl implements ExchangeRateService {
     public List<ExchangeRate> getRateByCode(String baseCurrencyCode, String targetCurrencyCode) {
         Currency baseCurrency = currencyRepository.getCurrencyByCode(baseCurrencyCode);
         Currency targetCurrency = currencyRepository.getCurrencyByCode(targetCurrencyCode);
-        return exchangeRateRepository.findByBaseCurrencyAndTargetCurrency(baseCurrency,targetCurrency);
+        return exchangeRateRepository.findByBaseCurrencyAndTargetCurrency(baseCurrency, targetCurrency);
 
     }
 
@@ -43,7 +43,7 @@ public class ExchangeRateImpl implements ExchangeRateService {
     public void updateExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         Currency baseCurrency = currencyRepository.getCurrencyByCode(baseCurrencyCode);
         Currency targetCurrency = currencyRepository.getCurrencyByCode(targetCurrencyCode);
-        exchangeRateRepository.updateRateByCurrencies(baseCurrency.getId(),targetCurrency.getId(),rate);
+        exchangeRateRepository.updateRateByCurrencies(baseCurrency.getId(), targetCurrency.getId(), rate);
     }
 
 

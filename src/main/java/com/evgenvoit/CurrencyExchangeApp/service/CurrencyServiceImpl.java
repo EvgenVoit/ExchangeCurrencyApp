@@ -18,12 +18,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     public List<Currency> getAllCurrencies() {
         return currencyRepository.findAll();
     }
-
     @Override
     public Currency getCurrencyByCode(String code) {
         return currencyRepository.getCurrencyByCode(code);
     }
-
     @Override
     public void addCurrency(Currency currency) {
         currencyRepository.save(currency);
@@ -33,7 +31,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     public void deleteCurrency(String code) {
         currencyRepository.deleteCurrencyByCode(code);
     }
-
     @Override
     public void deleteCurrencyById(Integer id) {
         currencyRepository.deleteCurrencyById(id);
