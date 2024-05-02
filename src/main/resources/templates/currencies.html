@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Currencies</title>
+    <style>
+        * {
+            color: black;
+        }
+
+        body {
+            background-color: #85a27b;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f2f2f2;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+
+<h1>List of Currencies</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Code</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#currencies}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{code}}</td>
+    </tr>
+    {{/currencies}}
+    </tbody>
+</table>
+<br>
+<h2>Add Currency</h2>
+
+<form action="/api/v1/currencies" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="code">Code:</label>
+    <input type="text" id="code" name="code" required>
+    <input type="submit" value="Add Currency">
+</form>
+<br>
+
+<h2>Get Currency</h2>
+<form onsubmit="event.preventDefault(); getCurrency();">
+    <label for="codeCurrency">Code:</label>
+    <input type="text" id="codeCurrency" name="codeCurrency">
+    <button type="submit">FIND</button>
+</form>
+<div id="currencyDetails"></div>
+<br>
+<h2>Exchange Currency</h2>
+
+<form action="/api/v1/exchange" method="get">
+    <label for="fromCurrency">From:</label>
+    <select id="fromCurrency" name="from">
+        <!-- Опции для выбора из списка доступных валют -->
+        <option value="USD">USD</option>
+        <option value="BYN">BYN</option>
+        <!-- Добавьте другие валюты по необходимости -->
+    </select>
+    <br>
+    <label for="toCurrency">To:</label>
+    <select id="toCurrency" name="to">
+        <!-- Опции для выбора из списка доступных валют -->
+        <option value="BYN">BYN</option>
+        <option value="USD">USD</option>
+        <!-- Добавьте другие валюты по необходимости -->
+    </select>
+    <br>
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" name="amount">
+    <br>
+    <button type="submit">Exchange</button>
+</form>
+<table id="currencyTable">
+    <thead>
+    <tr>
+        <th>Rate</th>
+        <th>Amount</th>
+        <th>Converted Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Здесь будут строки с данными о валюте -->
+    </tbody>
+</table>
+
+
+</body>
+<script>
+    // function getCurrency() {
+    //     var code = document.getElementById('codeCurrency').value;
+    //     fetch('/api/v1/currency/' + code)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Обработка полученных данных
+    //             document.getElementById('currencyDetails').innerText = JSON.stringify(data);
+    //         })
+    //         .catch(error => {
+    //             // Обработка ошибок
+    //             document.getElementById('currencyDetails').innerText = 'Ошибка: ' + error.message;
+    //         });
+    // }
+
+    function getCurrency() {
+        var code = document.getElementById('codeCurrency').value;
+        fetch('/api/v1/currency/' + code)
+            .then(response => response.json())
+            .then(data => {
+                // Очистка предыдущего содержимого
+                document.getElementById('currencyDetails').innerHTML = '';
+
+                // Создание таблицы и заголовков
+                var table = document.createElement('table');
+                var headerRow = table.insertRow();
+                var headers = ['Code', 'Name', 'Sign'];
+
+                // Добавление заголовков
+                headers.forEach(header => {
+                    var headerCell = headerRow.insertCell();
+                    headerCell.textContent = header;
+                });
+
+                // Добавление данных о валюте
+                var dataRow = table.insertRow();
+                var currencyData = [data.code, data.name, data.sign];
+                currencyData.forEach(cellData => {
+                    var cell = dataRow.insertCell();
+                    cell.textContent = cellData;
+                });
+
+                // Добавление таблицы на страницу
+                document.getElementById('currencyDetails').appendChild(table);
+            })
+            .catch(error => {
+                // Обработка ошибок
+                document.getElementById('currencyDetails').innerText = 'Ошибка: ' + error.message;
+            });
+    }
+    function displayCurrencyData(data) {
+        // Очистим таблицу перед добавлением новых данных
+        document.querySelector("#currencyTable tbody").innerHTML = "";
+
+        // Пройдемся по всем объектам в массиве данных и добавим их в таблицу
+        data.forEach(function(currency) {
+            // Создаем новую строку в таблице
+            var row = document.createElement("tr");
+
+            // Создаем ячейки для каждого столбца
+            var rateCell = document.createElement("td");
+            rateCell.textContent = currency.rate;
+            row.appendChild(rateCell);
+
+            var amountCell = document.createElement("td");
+            amountCell.textContent = currency.amount;
+            row.appendChild(amountCell);
+
+            var convertedAmountCell = document.createElement("td");
+            convertedAmountCell.textContent = currency.convertedAmount;
+            row.appendChild(convertedAmountCell);
+
+            // Добавляем строку в таблицу
+            document.querySelector("#currencyTable tbody").appendChild(row);
+        });
+    }
+
+</script>
+</html>

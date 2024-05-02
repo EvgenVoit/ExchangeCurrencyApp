@@ -1,9 +1,10 @@
-package com.evgenvoit.CurrencyExchangeApp.service;
+package com.evgenvoit.CurrencyExchangeApp.service.ServiceImpl;
 
 import com.evgenvoit.CurrencyExchangeApp.dao.CurrencyRepository;
 import com.evgenvoit.CurrencyExchangeApp.dao.ExchangeRateRepository;
 import com.evgenvoit.CurrencyExchangeApp.entity.Currency;
 import com.evgenvoit.CurrencyExchangeApp.entity.ExchangeRate;
+import com.evgenvoit.CurrencyExchangeApp.service.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

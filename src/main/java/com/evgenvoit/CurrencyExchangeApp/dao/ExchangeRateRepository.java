@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Integer> {
     List<ExchangeRate> findByBaseCurrencyAndTargetCurrency(Currency baseCurrencyCode, Currency targetCurrencyCode);
-
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO exchange_rates (base_currency_Id, target_currency_Id, rate) VALUES (:baseCurrencyId, :targetCurrencyId, :rate)", nativeQuery = true)

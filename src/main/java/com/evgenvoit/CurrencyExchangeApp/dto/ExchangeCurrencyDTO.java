@@ -4,12 +4,14 @@ import com.evgenvoit.CurrencyExchangeApp.entity.Currency;
 import com.evgenvoit.CurrencyExchangeApp.entity.ExchangeRate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ExchangeCurrencyDTO {
 
 //    private Currency baseCurrencyCode;

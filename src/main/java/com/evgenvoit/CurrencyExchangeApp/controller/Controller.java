@@ -15,6 +15,7 @@ import com.evgenvoit.CurrencyExchangeApp.service.ExchangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,19 +36,26 @@ public class Controller {
     @Autowired
     private ExchangeService exchangeService;
 
-    @GetMapping("/swagger")
+    @GetMapping("/swagger") // working
     public ModelAndView redirectToSwaggerUi() {
         return new ModelAndView("redirect:/swagger-ui/index.html");
     }
 
-    @GetMapping("/currencies") //working test
-    public ResponseEntity<List<Currency>> getAllCurrencies() {
-        try {
-            return new ResponseEntity<>(currencyService.getAllCurrencies(), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    @GetMapping("/currencies") //working test
+//    public ResponseEntity<List<Currency>> getAllCurrencies() {
+//        try {
+//            return new ResponseEntity<>(currencyService.getAllCurrencies(), HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+
+    @GetMapping("/currencies")
+    public ModelAndView getAllCurrencies() {
+        ModelAndView modelAndView = new ModelAndView("currencies");
+        modelAndView.addObject("currencies", currencyService.getAllCurrencies());
+        return modelAndView;
     }
 
     @GetMapping("/exchangeRates") //working test
@@ -71,14 +79,28 @@ public class Controller {
         return new ResponseEntity<>(exchangeRateService.getRateByCode(baseCode, targetCode), HttpStatus.OK);
     }
 
-    @PostMapping("/currencies") //working
-    public ResponseEntity<String> addCurrency(@RequestBody Currency currency) {
-        if (currencyService.existCurrencyByCode(currency.getCode())) {
-            throw new CurrencyAlreadyExistsException(currency.getCode());
+    //    @PostMapping("/currencies") //working test
+//    public ResponseEntity<String> addCurrency(@RequestBody Currency currency) {
+//        if (currencyService.existCurrencyByCode(currency.getCode())) {
+//            throw new CurrencyAlreadyExistsException(currency.getCode());
+//        } else {
+//            currencyService.addCurrency(currency);
+//        }
+//        return new ResponseEntity<>(GlobalConstants.ADDED_CURRENCY + currency.getCode(), HttpStatus.OK);
+//    }
+    @PostMapping("/currencies")
+    public ResponseEntity<String> addCurrency(@RequestParam String name, @RequestParam String code) {
+        Currency currency = new Currency();
+        currency.setName(name);
+        currency.setCode(code);
+
+        if (currencyService.existCurrencyByCode(code)) {
+            throw new CurrencyAlreadyExistsException(code);
         } else {
             currencyService.addCurrency(currency);
         }
-        return new ResponseEntity<>(GlobalConstants.ADDED_CURRENCY + currency.getCode(), HttpStatus.OK);
+
+        return new ResponseEntity<>(GlobalConstants.ADDED_CURRENCY + code, HttpStatus.OK);
     }
 
     @DeleteMapping("/currency/{code}") // working test
@@ -90,7 +112,7 @@ public class Controller {
         return new ResponseEntity<>(GlobalConstants.DELETED_CURRENCY + code, HttpStatus.OK);
     }
 
-    @PostMapping("/exchangeRates") // working
+    @PostMapping("/exchangeRates") // working test
     public ResponseEntity<String> addExchangeRate(@RequestBody ExchangeRateDTO exchangeRate) {
         if (exchangeRateService.existsByBaseCurrencyAndTargetCurrency(exchangeRate.getBaseCurrencyCode(), exchangeRate.getTargetCurrencyCode())) {
             throw new ExchangeRateAlreadyExists(exchangeRate.getBaseCurrencyCode(), exchangeRate.getTargetCurrencyCode());
@@ -101,7 +123,7 @@ public class Controller {
 
     }
 
-    @PatchMapping("/exchangeRate/{baseCode}/{targetCode}") //working
+    @PatchMapping("/exchangeRate/{baseCode}/{targetCode}") //working test
     public ResponseEntity<String> updateExchangeRate(@PathVariable String baseCode, @PathVariable String targetCode, @RequestBody ExchangeRate rate) {
         if (!exchangeRateService.existsByBaseCurrencyAndTargetCurrency(baseCode, targetCode)) {
             throw new ExchangeRateNotFoundException(baseCode, targetCode);
@@ -110,7 +132,7 @@ public class Controller {
         return new ResponseEntity<>(GlobalConstants.UPDATED_EXCHANGE_RATE + baseCode + "/" + targetCode, HttpStatus.OK);
     }
 
-    @GetMapping("/exchange") // working
+    @GetMapping("/exchange") // working test
     public ResponseEntity<ExchangeCurrencyDTO> makeExchange(@RequestParam String from, @RequestParam String to, @RequestParam BigDecimal amount) {
         List<ExchangeRate> exchangeRates = exchangeRateService.getRateByCode(from, to);
         if (exchangeRates.isEmpty()) {
@@ -121,5 +143,6 @@ public class Controller {
         return new ResponseEntity<>(currencyDTO, HttpStatus.OK);
 
     }
+
 
 }
