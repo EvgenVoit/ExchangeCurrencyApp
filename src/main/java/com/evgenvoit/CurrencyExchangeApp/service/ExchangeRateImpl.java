@@ -46,5 +46,10 @@ public class ExchangeRateImpl implements ExchangeRateService {
         exchangeRateRepository.updateRateByCurrencies(baseCurrency.getId(), targetCurrency.getId(), rate);
     }
 
+    @Override
+    public boolean existsByBaseCurrencyAndTargetCurrency(String baseCurrencyCode, String targetCurrencyCode) {
+        return exchangeRateRepository.existsExchangeRateByBaseCurrency_CodeAndTargetCurrency_Code(baseCurrencyCode,targetCurrencyCode);
+    }
+
 
 }

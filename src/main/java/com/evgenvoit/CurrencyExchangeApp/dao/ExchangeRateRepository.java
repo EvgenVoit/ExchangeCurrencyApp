@@ -23,5 +23,6 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Inte
     @Query("UPDATE ExchangeRate e SET e.rate = :newRate WHERE e.baseCurrency.id = :baseCurrencyId AND e.targetCurrency.id = :targetCurrencyId")
     void updateRateByCurrencies(Integer baseCurrencyId, Integer targetCurrencyId, BigDecimal newRate);
 
+    boolean existsExchangeRateByBaseCurrency_CodeAndTargetCurrency_Code(String baseCurrencyCode, String targetCurrencyCode);
 
 }

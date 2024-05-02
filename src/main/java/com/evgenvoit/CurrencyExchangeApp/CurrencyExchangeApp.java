@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CurrencyExchangeAppApplication {
+public class CurrencyExchangeApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CurrencyExchangeAppApplication.class, args);
+		SpringApplication.run(CurrencyExchangeApp.class, args);
 	}
 
 }

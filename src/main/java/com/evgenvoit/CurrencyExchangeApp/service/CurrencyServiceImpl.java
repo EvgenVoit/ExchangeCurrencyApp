@@ -36,5 +36,10 @@ public class CurrencyServiceImpl implements CurrencyService {
         currencyRepository.deleteCurrencyById(id);
     }
 
+    @Override
+    public boolean existCurrencyByCode(String code) {
+        return currencyRepository.existsByCode(code);
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.evgenvoit.CurrencyExchangeApp.service;
 
+import com.evgenvoit.CurrencyExchangeApp.entity.Currency;
 import com.evgenvoit.CurrencyExchangeApp.entity.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -13,4 +14,6 @@ public interface ExchangeRateService {
     void addExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 
     void updateExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
+
+    boolean existsByBaseCurrencyAndTargetCurrency(String baseCurrencyCode, String targetCurrencyCode);
 }

@@ -14,4 +14,6 @@ public interface CurrencyRepository extends JpaRepository<Currency, Integer> {
     @Transactional
     void deleteCurrencyById(Integer id);
 
+    boolean existsByCode(String code);
+
 }

@@ -15,4 +15,6 @@ public interface CurrencyService {
     void deleteCurrency(String code);
 
     void deleteCurrencyById(Integer id);
+
+    boolean existCurrencyByCode(String code);
 }
