@@ -15,7 +15,6 @@ import com.evgenvoit.CurrencyExchangeApp.service.ExchangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,21 +40,14 @@ public class Controller {
         return new ModelAndView("redirect:/swagger-ui/index.html");
     }
 
-//    @GetMapping("/currencies") //working test
-//    public ResponseEntity<List<Currency>> getAllCurrencies() {
-//        try {
-//            return new ResponseEntity<>(currencyService.getAllCurrencies(), HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-    @GetMapping("/currencies")
-    public ModelAndView getAllCurrencies() {
-        ModelAndView modelAndView = new ModelAndView("currencies");
-        modelAndView.addObject("currencies", currencyService.getAllCurrencies());
-        return modelAndView;
+    @GetMapping("/currencies") //working test
+    public ResponseEntity<List<Currency>> getAllCurrencies() {
+        try {
+            return new ResponseEntity<>(currencyService.getAllCurrencies(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/exchangeRates") //working test
@@ -79,28 +71,14 @@ public class Controller {
         return new ResponseEntity<>(exchangeRateService.getRateByCode(baseCode, targetCode), HttpStatus.OK);
     }
 
-    //    @PostMapping("/currencies") //working test
-//    public ResponseEntity<String> addCurrency(@RequestBody Currency currency) {
-//        if (currencyService.existCurrencyByCode(currency.getCode())) {
-//            throw new CurrencyAlreadyExistsException(currency.getCode());
-//        } else {
-//            currencyService.addCurrency(currency);
-//        }
-//        return new ResponseEntity<>(GlobalConstants.ADDED_CURRENCY + currency.getCode(), HttpStatus.OK);
-//    }
-    @PostMapping("/currencies")
-    public ResponseEntity<String> addCurrency(@RequestParam String name, @RequestParam String code) {
-        Currency currency = new Currency();
-        currency.setName(name);
-        currency.setCode(code);
-
-        if (currencyService.existCurrencyByCode(code)) {
-            throw new CurrencyAlreadyExistsException(code);
+    @PostMapping("/currencies") //working test
+    public ResponseEntity<String> addCurrency(@RequestBody Currency currency) {
+        if (currencyService.existCurrencyByCode(currency.getCode())) {
+            throw new CurrencyAlreadyExistsException(currency.getCode());
         } else {
             currencyService.addCurrency(currency);
         }
-
-        return new ResponseEntity<>(GlobalConstants.ADDED_CURRENCY + code, HttpStatus.OK);
+        return new ResponseEntity<>(GlobalConstants.ADDED_CURRENCY + currency.getCode(), HttpStatus.OK);
     }
 
     @DeleteMapping("/currency/{code}") // working test
