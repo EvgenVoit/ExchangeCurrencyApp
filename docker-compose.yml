@@ -1,0 +1,115 @@
+#version: '3.8'
+#
+#services:
+#  mysql:
+#    image: mysql:8.0
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: exchange_db
+#      MYSQL_ROOT_PASSWORD: 28evgen28
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: 28evgen28
+#    ports:
+#      - "3307:3306"
+#
+#  spring-boot-app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - mysql
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/exchange_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: 28evgen28
+
+#version: '3.8'
+#
+#services:
+#  mysql:
+#    image: mysql:latest
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 28evgen28
+#      MYSQL_DATABASE: exchange_db
+#      MYSQL_PASSWORD: 28evgen28
+#    ports:
+#      - "3307:3306"
+#
+#  spring-boot-app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - mysql
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/exchange_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: 28evgen28
+
+#version: "3.8"
+#services:
+#  rest:
+#    container_name: rest_playground
+#    build:
+#      dockerfile: Dockerfile
+#    image: spring-boot-playground:latest
+#    ports:
+#      - 8080:8080
+#    environment:
+#      SPRING_APPLICATION_JSON: '{
+#        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/exchange_db?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true",
+#        "spring.datasource.username": "root",
+#        "spring.datasource.password": "28evgen28",
+#        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect"
+#      }'
+#    depends_on:
+#      mysqldb:
+#        condition: service_healthy
+#    networks:
+#      - playground-network
+#  mysqldb:
+#    image: mysql:latest
+#    container_name: mysqldb
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=root
+#      - MYSQL_DATABASE=exchange_db
+#    ports:
+#      - '3307:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "mysqldb", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+#      timeout: 20s
+#      retries: 10
+#    networks:
+#      - playground-network
+#volumes:
+#  my-db:
+#networks:
+#  playground-network:
+
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 28evgen28
+      MYSQL_DATABASE: exchange_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 28evgen28
+
+  spring-boot-app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
